@@ -1,2 +1,2 @@
 # Administration
-Usefull stuff to administer maschines.
+Everything you need for administer local Maschines.
