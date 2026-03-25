@@ -9,8 +9,26 @@ function Get-WindowsProductKey {
             $backupKey = (Get-ItemProperty -Path $backupKeyPath -Name "BackupProductKeyDefault" -ErrorAction SilentlyContinue).BackupProductKeyDefault
         }
 
+        function Show-BoxedMessage {
+            param (
+                [string]$Text,
+                [ConsoleColor]$ForegroundColor = 'Green',
+                [ConsoleColor]$BorderColor = 'Yellow'
+            )
+
+            $lines = $Text -split "`n"
+            $width = ($lines | Measure-Object -Property Length -Maximum).Maximum
+            $border = '+' + ('-' * ($width + 2)) + '+'
+            Write-Host $border -ForegroundColor $BorderColor
+            foreach ($line in $lines) {
+                $padded = $line.PadRight($width)
+                Write-Host "| $padded |" -ForegroundColor $ForegroundColor
+            }
+            Write-Host $border -ForegroundColor $BorderColor
+        }
+
         if ($backupKey) {
-            Write-Output "Windows Product Key (from BackupProductKeyDefault): $backupKey"
+            Show-BoxedMessage -Text "Windows Product Key (from BackupProductKeyDefault): $backupKey" -ForegroundColor Cyan -BorderColor Magenta
             return
         }
 
@@ -37,9 +55,9 @@ function Get-WindowsProductKey {
             }
         }
         
-        Write-Output "Windows Product Key: $productKey"
+        Show-BoxedMessage -Text "Windows Product Key: $productKey" -ForegroundColor Green -BorderColor Blue
     } catch {
-        Write-Error "Failed to retrieve product key: $_"
+        Show-BoxedMessage -Text "Failed to retrieve product key: $_" -ForegroundColor Red -BorderColor DarkRed
     }
 }
 
