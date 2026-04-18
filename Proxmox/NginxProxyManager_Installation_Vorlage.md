@@ -65,7 +65,6 @@ cd /opt/nginx-proxy-manager
 
 # Docker Compose Datei erstellen
 cat <<EOF > docker-compose.yml
-version: '3.8'
 services:
   app:
     image: 'jc21/nginx-proxy-manager:latest'
